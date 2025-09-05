@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Online</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: 0.3s;
+      flex-direction: column;
+    }
+
+    /* Tema */
+    body.dark   { background: #1e1e1e; color: white; }
+    body.light  { background: #f3f3f3; color: black; }
+    body.blue   { background: #001f3f; color: #fff; }
+    body.green  { background: #003300; color: #aaffaa; }
+    body.purple { background: #2e004f; color: #e0b3ff; }
+    body.yellow { background: #fff8e1; color: #333; }
+
+    .calculator {
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+      width: 320px;
+      transition: 0.3s;
+    }
+    body.dark .calculator   { background: #2b2b2b; }
+    body.light .calculator  { background: #fff; }
+    body.blue .calculator   { background: #004080; }
+    body.green .calculator  { background: #004d00; }
+    body.purple .calculator { background: #4b0082; }
+    body.yellow .calculator { background: #fff176; }
+
+    #display {
+      width: 100%;
+      height: 60px;
+      text-align: right;
+      font-size: 28px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+    body.dark #display   { background: #3a3a3a; color: #fff; }
+    body.light #display  { background: #f9f9f9; color: #000; border: 1px solid #ccc; }
+    body.blue #display   { background: #003366; color: #fff; }
+    body.green #display  { background: #002200; color: #aaffaa; }
+    body.purple #display { background: #33004d; color: #e0b3ff; }
+    body.yellow #display { background: #fffde7; color: #333; border: 1px solid #ffeb3b; }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .buttons button {
+      height: 60px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    /* Warna tombol per tema */
+    body.dark .buttons button   { background: #444; color: white; }
+    body.dark .buttons button:hover { background: #666; }
+
+    body.light .buttons button  { background: #e0e0e0; color: black; }
+    body.light .buttons button:hover { background: #d0d0d0; }
+
+    body.blue .buttons button   { background: #0055aa; color: white; }
+    body.blue .buttons button:hover { background: #0077cc; }
+
+    body.green .buttons button  { background: #006600; color: #aaffaa; }
+    body.green .buttons button:hover { background: #009900; }
+
+    body.purple .buttons button { background: #6600cc; color: #e0b3ff; }
+    body.purple .buttons button:hover { background: #8000ff; }
+
+    body.yellow .buttons button { background: #fff59d; color: #333; }
+    body.yellow .buttons button:hover { background: #ffee58; }
+
+    .buttons button:active { transform: scale(0.9); }
+
+    .equal {
+      grid-column: span 2;
+      background: #ff9800 !important;
+      color: white !important;
+    }
+    .equal:hover { background: #e68900 !important; }
+
+    .clear {
+      background: #d32f2f !important;
+      color: white !important;
+    }
+    .clear:hover { background: #b71c1c !important; }
+
+    #history {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    body.dark #history   { background: #1a1a1a; color: #ccc; }
+    body.light #history  { background: #f0f0f0; color: #333; }
+    body.blue #history   { background: #00264d; color: #cce0ff; }
+    body.green #history  { background: #001a00; color: #99ff99; }
+    body.purple #history { background: #220033; color: #d9b3ff; }
+    body.yellow #history { background: #fffde7; color: #444; border: 1px solid #fdd835; }
+
+    #toggleTheme {
+      margin-bottom: 10px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .credit {
+      margin-top: 15px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="calculator">
+    <button id="toggleTheme">☀️ Light Mode</button>
+    <input type="text" id="display" disabled>
+    <div class="buttons">
+      <button onclick="clearDisplay()" class="clear">C</button>
+      <button onclick="append('/')">÷</button>
+      <button onclick="append('*')">×</button>
+      <button onclick="append('-')">-</button>
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('+')">+</button>
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('(')">(</button>
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append(')')">)</button>
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()" class="equal">=</button>
+    </div>
+    <div id="history">
+      <strong>Riwayat:</strong>
+    </div>
+  </div>
+
+  <div class="credit">Calculator By Syafx</div>
+
+  <script>
+    let display = document.getElementById("display");
+    let historyDiv = document.getElementById("history");
+    let toggleBtn = document.getElementById("toggleTheme");
+    let body = document.body;
+    let themes = ["dark", "light", "blue", "green", "purple", "yellow"];
+    let currentTheme = 0;
+
+    function append(value) {
+      display.value += value;
+    }
+
+    function clearDisplay() {
+      display.value = "";
+    }
+
+    function calculate() {
+      try {
+        let expression = display.value;
+        let result = Function("return " + expression)();
+        display.value = result;
+
+        let p = document.createElement("p");
+        p.textContent = expression + " = " + result;
+        historyDiv.prepend(p);
+
+        if (historyDiv.childElementCount > 12) {
+          historyDiv.removeChild(historyDiv.lastChild);
+        }
+      } catch {
+        display.value = "Error";
+      }
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      body.classList.remove(themes[currentTheme]);
+      currentTheme = (currentTheme + 1) % themes.length;
+      body.classList.add(themes[currentTheme]);
+      toggleBtn.textContent = "🎨 " + themes[currentTheme].toUpperCase() + " Mode";
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if ("0123456789+-*/().".includes(e.key)) {
+        append(e.key);
+      } else if (e.key === "Enter") {
+        calculate();
+      } else if (e.key === "Escape") {
+        clearDisplay();
+      }
+    });
+  </script>
+</body>
+</html>
